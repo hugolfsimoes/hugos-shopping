@@ -7,22 +7,34 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Document</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="script.js"></script>
 </head>
 
 <body>
+  <header>
+    <img id="logo" src="img/logo.png" alt="Logo do Hugo's Shopping">
+    <section>
+      <label for="serach">
+        <input id="search" type="text">
+      </label>
+      <button id="search-button" class="search-button" type="button">Search</button>
+    </section>
+  </header>
   <section class="container">
     <section class="items">
       <div class="loading">loading...</div>
     </section>
     <section class="cart">
       <span class="cart__title">Carrinho de compras</span>
+      <section class="div-itens">
+        <p></p>Itens:
+        <ol class="cart__items"></ol>
+      </section>
+      <p class="total-price">Preço total R$ $0,00</p>
       <button class="empty-cart">Esvaziar carrinho</button>
-      <ol class="cart__items"></ol>
-      <p class="total-price">Preço total: $0</p>
     </section>
   </section>
 
 </body>
+<script src="script.js"></script>
 
 </html>

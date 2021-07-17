@@ -1,3 +1,12 @@
+const searchButton = document.querySelector('.search-button');
+searchButton.addEventListener('click', searchNewProduct);
+function searchNewProduct() {
+  const searchInput = document.querySelector('#search');
+  const searchInputValue = searchInput.value;
+  console.log(searchInputValue);
+  getProductsList(searchInputValue);
+}
+
 // cria uma tag de imgem e atribui informções a partir dos parâmetros.
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -17,7 +26,7 @@ function totalPrice() {
   });
   const total = prices.reduce((acc, curr) => acc + curr, 0);
   const totalValue = document.querySelector('.total-price');
-  totalValue.innerText = total;
+  totalValue.innerText = `Preço total R$ ${total.toFixed(2)}`;
 }
 // Quando um item da lista do carrinho de compras é clicado o mesmo é removido da lista.
 function cartItemClickListener(event) {
@@ -85,15 +94,28 @@ function createProductItemElement({
 // Faz  requisição da API, quando a API for carregada vai remover a tag de loadinge  transforama os arquivos da API em JSON,  e envia cada item para ser criado na função 'createProductItemElement' e adiciona cada item na section. 
 async function getProductsList(word) {
   const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${word}`);
-  await document.querySelector('.loading').remove();
+  const loading =  document.querySelector('.loading');
+  if(loading) {
+    loading.remove();
+  }
   const object = await response.json();
   const {
     results,
   } = object;
   
+  const allItens = document.querySelectorAll('.item');
+  if(allItens.length > 0) {
+    const sectionItens = allItens[0].parentNode;
+    allItens.forEach((item) => {
+      sectionItens.removeChild(item);
+    })
+
+  }
+
+  
   const section = document.querySelector('.items');
+
   results.forEach((item) => {
-    // Dica do PR da Ana Gomes 
     section.appendChild(createProductItemElement(item));
   });
 }
