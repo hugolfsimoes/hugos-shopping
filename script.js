@@ -1,13 +1,15 @@
 const searchButton = document.querySelector('.search-button');
 searchButton.addEventListener('click', searchNewProduct);
 function searchNewProduct() {
+  const loading =  document.querySelector('.loading');
+  loading.style.display ='initial'
   const searchInput = document.querySelector('#search');
   const searchInputValue = searchInput.value;
   console.log(searchInputValue);
   getProductsList(searchInputValue);
+  
 }
 
-// cria uma tag de imgem e atribui informções a partir dos parâmetros.
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -15,9 +17,6 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
-/* function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-} */
 function totalPrice() {
   const listItens = document.querySelectorAll('li');
   const prices = [];
@@ -28,7 +27,6 @@ function totalPrice() {
   const totalValue = document.querySelector('.total-price');
   totalValue.innerText = `Preço total R$ ${total.toFixed(2)}`;
 }
-// Quando um item da lista do carrinho de compras é clicado o mesmo é removido da lista.
 function cartItemClickListener(event) {
   const alvo = event.target;
   const listCart = document.querySelector('ol');
@@ -37,7 +35,6 @@ function cartItemClickListener(event) {
   localStorage.setItem('product', listCart.innerHTML);
 }
 
-// Recebe um objeto desconstrói pegando apenas id,title e price, cria um elemento li com informações do objeto recebido, adiciona um escutador de eventos com a função 'cartItemClickListener' e retorna o elemento li.
 function createCartItemElement({
   id: sku,
   title: name,
@@ -51,7 +48,6 @@ function createCartItemElement({
   return li;
 }
 
-// Recebe as section criadas e adiciona um escutador de eventos click, faz um requerimento em uma API passando o id pego na section, traansforma em JSON, chama a função 'createCartItemElement' e adiciona o retono na lista de compras.
 function addToCart(product) {
   product.addEventListener('click', async () => {
     const id = product.children[0].innerText;
@@ -65,7 +61,6 @@ function addToCart(product) {
   });
 }
 
-// Cria e adiciona informações ao elemento de acordo com parâmetros passados.
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
@@ -74,7 +69,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// Recebe um objeto como parâmetro, cria uma section e coloca dentro da section os elementos criados com informações do objeto, chama a função addToCart passando  section crida e retorna o elemento.
 function createProductItemElement({
   id: sku,
   title: name,
@@ -86,9 +80,9 @@ function createProductItemElement({
   sectionPriceButton.classList.add('div-priceButton')
   section.classList.add('item');
 
+  section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
   sectionPriceButton.appendChild(createCustomElement('span', 'item__price', `Valor R$ ${salePrice.toFixed(2)}`));
   sectionPriceButton.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
   section.appendChild(sectionPriceButton);
@@ -97,17 +91,14 @@ function createProductItemElement({
   return section;
 }
 
-// Faz  requisição da API, quando a API for carregada vai remover a tag de loadinge  transforama os arquivos da API em JSON,  e envia cada item para ser criado na função 'createProductItemElement' e adiciona cada item na section. 
 async function getProductsList(word) {
   const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${word}`);
   const loading =  document.querySelector('.loading');
-  if(loading) {
-    loading.remove();
-  }
   const object = await response.json();
   const {
     results,
   } = object;
+
   
   const allItens = document.querySelectorAll('.item');
   if(allItens.length > 0) {
@@ -115,7 +106,10 @@ async function getProductsList(word) {
     allItens.forEach((item) => {
       sectionItens.removeChild(item);
     })
+  }
 
+  if(loading) {
+    loading.style.display = 'none';
   }
   const section = document.querySelector('.items');
 
@@ -155,7 +149,7 @@ function changeItensNumber() {
 }
 
 window.onload = function onload() {
-  getProductsList('More relevant');
+  getProductsList('computador');
   loadLocalStorage();
   changeItensNumber();
   deliteList();
