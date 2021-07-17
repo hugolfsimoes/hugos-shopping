@@ -11,8 +11,8 @@
 
 <body>
   <header>
-    <img id="logo" src="img/logo.png" alt="Logo do Hugo's Shopping">
-    <section>
+    <a href="index.html"><img id="logo" src="img/logo.png" alt="Logo do Hugo's Shopping"></a>
+    <section class="search-section">
       <label for="serach">
         <input id="search" type="text">
       </label>
@@ -26,10 +26,10 @@
     <section class="cart">
       <span class="cart__title">Carrinho de compras</span>
       <section class="div-itens">
-        <p></p>Itens:
+        <p id="word-itens">0 itens.</p>
         <ol class="cart__items"></ol>
       </section>
-      <p class="total-price">Preço total R$ $0,00</p>
+      <p class="total-price">Preço total R$ 0.00</p>
       <button class="empty-cart">Esvaziar carrinho</button>
     </section>
   </section>

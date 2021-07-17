@@ -60,6 +60,7 @@ function addToCart(product) {
     const listCart = document.querySelector('ol');
     listCart.appendChild(createCartItemElement(element));
     totalPrice();
+    changeItensNumber();
     localStorage.setItem('product', listCart.innerHTML);
   });
 }
@@ -78,14 +79,19 @@ function createProductItemElement({
   id: sku,
   title: name,
   thumbnail: image,
+  price: salePrice,
 }) {
   const section = document.createElement('section');
-  section.className = 'item';
+  const sectionPriceButton = document.createElement('section');
+  sectionPriceButton.classList.add('div-priceButton')
+  section.classList.add('item');
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  sectionPriceButton.appendChild(createCustomElement('span', 'item__price', `Valor R$ ${salePrice.toFixed(2)}`));
+  sectionPriceButton.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(sectionPriceButton);
 
   addToCart(section);
   return section;
@@ -111,8 +117,6 @@ async function getProductsList(word) {
     })
 
   }
-
-  
   const section = document.querySelector('.items');
 
   results.forEach((item) => {
@@ -126,7 +130,10 @@ function deliteList() {
   const totalValue = document.querySelector('.total-price');
   buttonDelite.addEventListener('click', () => {
     listCart.innerHTML = '';
-    totalValue.innerHTML = 0;
+    totalValue.innerHTML = 'Preço total R$ 0.00';
+  localStorage.setItem('product', listCart.innerHTML);
+  changeItensNumber();
+  
   });
 }
 
@@ -137,10 +144,19 @@ function loadLocalStorage() {
     localStorage.setItem('product', listCart.innerHTML);
   });
   listCart.innerHTML = localStorage.getItem('product');
+  changeItensNumber();
+  totalPrice();
+}
+
+function changeItensNumber() {
+  const tagPItens = document.querySelector('#word-itens');
+  const numberProducts = document.querySelectorAll('.cart__item').length;
+  tagPItens.innerHTML = `${numberProducts} iten(s)`;
 }
 
 window.onload = function onload() {
-  getProductsList('computador');
+  getProductsList('More relevant');
   loadLocalStorage();
+  changeItensNumber();
   deliteList();
 };
