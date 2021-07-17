@@ -5,7 +5,6 @@ function searchNewProduct() {
   loading.style.display ='initial'
   const searchInput = document.querySelector('#search');
   const searchInputValue = searchInput.value;
-  console.log(searchInputValue);
   getProductsList(searchInputValue);
   
 }
@@ -50,7 +49,7 @@ function createCartItemElement({
 
 function addToCart(product) {
   product.addEventListener('click', async () => {
-    const id = product.children[0].innerText;
+    const id = product.children[1].innerText;
     const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const element = await response.json();
     const listCart = document.querySelector('ol');
